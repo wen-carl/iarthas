@@ -63,6 +63,7 @@
                   <transformer>
                     <manifestEntries>
                       <Premain-Class>agent.agentDomain.IPreMain</Premain-Class>
+                      <mainClass>agent.Main</mainClass>
                     </manifestEntries>
                   </transformer>
                 </transformers>
@@ -95,7 +96,8 @@
                 <transformer>
                   <manifestEntries>
                     <Premain-Class>agent.agentDomain.IPreMain</Premain-Class>
-                    <Agent-Class>agent.agentDomain.TimeTunnelAgentMain</Agent-Class>
+                    <Agent-Class>agent.agentDomain.WatchAgentMain</Agent-Class>
+                    <mainClass>agent.Main</mainClass>
                     <Can-Retransform-Classes>true</Can-Retransform-Classes>
                     <Can-Redefine-Classes>true</Can-Redefine-Classes>
                   </manifestEntries>
@@ -120,11 +122,18 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+      <groupId>com.sun</groupId>
+      <artifactId>tools</artifactId>
+      <version>1.8.0_261</version>
+      <scope>system</scope>
+      <systemPath>/Library/Java/JavaVirtualMachines/jdk1.8.0_261.jdk/Contents/Home/lib/tools.jar</systemPath>
+    </dependency>
   </dependencies>
   <properties>
-    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 </project>
 

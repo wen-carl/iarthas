@@ -1,13 +1,11 @@
 package agent;
 
-import agent.Utils.Advice;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
 import java.io.*;
 import java.lang.reflect.Method;
 
-import static java.lang.Class.forName;
+import agent.Utils.Advice;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * Created by 64669 on 2019/7/23.
@@ -20,14 +18,15 @@ import static java.lang.Class.forName;
 
 public class TimeTunnelTest {
 
-    public int x =5;
+    public int x = 5;
     public Main main1 = new Main();
-    public int add(TimeTunnelTest x,int y){
-        return x.x+y;
+
+    public int add(TimeTunnelTest x, int y) {
+        return x.x + y;
     }
 
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
 //        TimeTunnelTest t = new TimeTunnelTest();
 //        t.x = 4;
 //        while(true){
@@ -45,12 +44,12 @@ public class TimeTunnelTest {
     }
 
 
-    public int doAdd(int x,String s,long l ,Job j,Main n,double d) {
+    public int doAdd(int x, String s, long l, Job j, Main n, double d) {
 
-        return  n.x + 7;
+        return n.x + 7;
     }
 
-    public static int func(int x , String str , double d ,TimeTunnelTest t){
+    public static int func(int x, String str, double d, TimeTunnelTest t) {
 //        String result = JSONObject.toJSONString(t);
 //        System.out.println(t.x);
 //        System.out.println(result);
@@ -58,7 +57,7 @@ public class TimeTunnelTest {
 //        String s = "{\"main1\":{\"j\":{\"str\":\"job\",\"x\":2},\"x\":1,\"y\":2},\"x\":5}";
 //        TimeTunnelTest t1 = JSON.parseObject(s,TimeTunnelTest.class);
 //        System.out.println(t1.x);
-        return x+t.x;
+        return x + t.x;
     }
 
     public static void testFastJson(TimeTunnelTest t) {
@@ -70,11 +69,10 @@ public class TimeTunnelTest {
     }
 
 
-
     public static void testWrite() {
         ObjectOutputStream out = null;
         try {
-            out = new ObjectOutputStream(new FileOutputStream(new File("./doAddAdvice"),true));
+            out = new ObjectOutputStream(new FileOutputStream(new File("./doAddAdvice"), true));
             // 保留类
             Class<?> tc = TimeTunnelTest.class;
 
@@ -100,66 +98,66 @@ public class TimeTunnelTest {
 //                    args[2] = JSON.toJSONString(d);
 //                    args[3] = JSON.toJSONString(timeTunnelTest);
 
-                    Advice advice = new Advice(tc,mn,pt,new String[]{});
+                    Advice advice = new Advice(tc, mn, pt, new String[]{});
                     out.writeObject(advice);
                     break;
                 }
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
-        }finally {
+        } finally {
             try {
                 if (out != null)
                     out.close();
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
             }
         }
 
     }
 
-    public static void testRead(){
+    public static void testRead() {
         ObjectInputStream input = null;
         ObjectInputStream input1 = null;
 
         String path = "./agent.Job@doAdd#1564459759089";
-        String metaPath = path.substring(0,path.indexOf("#"));
+        String metaPath = path.substring(0, path.indexOf("#"));
 
-        try{
+        try {
             input = new ObjectInputStream(new FileInputStream(new File(metaPath)));
             input1 = new ObjectInputStream(new FileInputStream(new File(path)));
             Advice advice = (Advice) input.readObject();
 
             Class<?> targetClass = advice.targetClass;
-            Method method = targetClass.getMethod(advice.methodname,advice.paramTypes);
+            Method method = targetClass.getMethod(advice.methodname, advice.paramTypes);
 
 
             String[] strArgs = (String[]) input1.readObject();
             Object[] args = getParams(strArgs);
-            Object result = method.invoke(targetClass.newInstance(),args);
-            System.out.println((int)result);
+            Object result = method.invoke(targetClass.newInstance(), args);
+            System.out.println((int) result);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
-        }finally {
+        } finally {
             try {
                 if (input != null)
                     input.close();
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
             }
         }
     }
 
 
-    public static Object[] getParams(String[] strAgrs){
+    public static Object[] getParams(String[] strAgrs) {
         Object[] result = new Object[strAgrs.length];
 //        for(int i=0; i<strAgrs.length ;i++){
 //            result[i] = JSON.parseObject(strAgrs[i]);
-       // t x,String s,long l ,Job j,Main n,double d
+        // t x,String s,long l ,Job j,Main n,double d
 //        }
-        result[0] = JSON.parseObject(strAgrs[0],Integer.class);
+        result[0] = JSON.parseObject(strAgrs[0], Integer.class);
         result[1] = JSON.parseObject(strAgrs[1], String.class);
         result[2] = JSON.parseObject(strAgrs[2], Long.class);
         result[3] = JSON.parseObject(strAgrs[3], Job.class);
@@ -170,7 +168,7 @@ public class TimeTunnelTest {
     }
 
 
-    public static void test(){
+    public static void test() {
         String jsonS = "{\"j\":{\"str\":\"job\",\"x\":1},\"x\":1,\"y\":\"abc\"}";
         JSONObject object = JSON.parseObject(jsonS);
 
